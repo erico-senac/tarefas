@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/images/image0_0.png" type="image/png">
+    <title>Gerênciador de Tarefas</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <div class="app">
+        <main class="app__main">
+            <header class="app__main_header">
+                <figure class="app__logo-figure">
+                    <img class="app__logo-imagem" src="./assets/images/image0_0.png"
+                         alt="imagem de uma gerenciadora de tarefas">
+                </figure>
+            </header>
+        </main>
+        <div class="app__form">
+            <form class="app__form_add_tasks">
+                <label class="app__form_label">
+                    Nome da Tarefa
+                    <input name="name_task" type="text" class="app__form_text" placeholder="Digite um nome para tarefa"
+                           required>
+                </label>
+                <label class="app__form_label">
+                    Descrição
+                    <textarea name="task" class="app__form_textarea" rows="3" required
+                              placeholder="Digite aqui a descrição da sua tarefa"></textarea>
+                </label>
+                <label class="app__form_label">
+                    Classificação
+                    <select class="app__form_select" required>
+                        <optgroup label="Classificação">
+                            <option value="Familiar">Familiar</option>
+                            <option value="Profissional">Profissional</option>
+                            <option value="Lazer">Lazer</option>
+                        </optgroup>
+                    </select>
+                </label>
+                <label class="app__form_label">
+                    Prazo
+                    <input type="datetime-local" class="app__form_text" required>
+                </label>
+                <label class="app__form_label">
+                    Status
+                    <select class="app__form_select" required>
+                        <optgroup label="Status">
+                            <option value="NI">A Fazer</option>
+                            <option value="I">Iniciado</option>
+                            <option value="A">Andamento</option>
+                            <option value="F">Finalizada</option>
+                            <option value="NC">Não Concluída</option>
+                        </optgroup>
+
+                    </select>
+                </label>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
