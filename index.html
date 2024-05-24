@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./assets/images/image0_0.png" type="image/png">
     <title>Gerênciador de Tarefas</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.css">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
@@ -18,20 +19,21 @@
             </header>
         </main>
         <div class="app__form">
+            <div class="app__form_titulo">Agendador de Tarefas</div>
             <form class="app__form_add_tasks">
-                <label class="app__form_label">
+                <label class="app__form_label form-label">
                     Nome da Tarefa
-                    <input name="name_task" type="text" class="app__form_text" placeholder="Digite um nome para tarefa"
+                    <input id="name_task" name="name_task" type="text" class="form-text app__form_text" placeholder="Digite um nome para tarefa"
                            required>
                 </label>
-                <label class="app__form_label">
+                <label class="app__form_label form-label">
                     Descrição
-                    <textarea name="task" class="app__form_textarea" rows="3" required
-                              placeholder="Digite aqui a descrição da sua tarefa"></textarea>
+                    <textarea id="task" name="task" class="app__form_textarea form-text" rows="3" required
+                              placeholder="Digite aqui a descrição da sua tarefa" ></textarea>
                 </label>
-                <label class="app__form_label">
+                <label class="app__form_label form-label">
                     Classificação
-                    <select class="app__form_select" required>
+                    <select class="app__form_select form-select" required>
                         <optgroup label="Classificação">
                             <option value="Familiar">Familiar</option>
                             <option value="Profissional">Profissional</option>
@@ -39,13 +41,13 @@
                         </optgroup>
                     </select>
                 </label>
-                <label class="app__form_label">
+                <label class="app__form_label form-label">
                     Prazo
-                    <input type="datetime-local" class="app__form_text" required>
+                    <input type="datetime-local" class="form-text app__form_text" required>
                 </label>
-                <label class="app__form_label">
+                <label class="app__form_label form-label">
                     Status
-                    <select class="app__form_select" required>
+                    <select class="app__form_select form-select" required>
                         <optgroup label="Status">
                             <option value="NI">A Fazer</option>
                             <option value="I">Iniciado</option>
@@ -53,12 +55,17 @@
                             <option value="F">Finalizada</option>
                             <option value="NC">Não Concluída</option>
                         </optgroup>
-
                     </select>
                 </label>
+                <div class="app__form_buttons">
+                    <button id="btn_save" class="btn btn-success" type="submit">Gravar Tarefa</button>
+                </div>
             </form>
         </div>
-    </div>
+        <div class="app__list_tasks">
 
+        </div>
+    </div>
+    <script src="./assets/js/tarefas_crud.js"></script>
 </body>
 </html>
