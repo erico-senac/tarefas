@@ -48,7 +48,7 @@ body{
     position: sticky;
 }
 figure.app__logo-imagem{
-    width: 75%;
+    width: 80%;
 }
 .app__form{
     margin: auto;
@@ -59,13 +59,20 @@ figure.app__logo-imagem{
     padding: 0.10rem 0.25rem;
     border-style: outset;
 }
+.app__form_grid{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
 .app__form_titulo{
     text-align: center;
     font-size: 2.5rem;
     font-family: var(--fonte-cursiva);
 }
 .app__form_label{
-    padding-top: 0.25rem;
+    padding-top: 0.15rem;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -88,4 +95,17 @@ figure.app__logo-imagem{
     margin-top: 1rem;
     display: flex;
     justify-content: center;
+}
+
+.form__buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: hsla(var(--hue), 45%, 65%, 70%);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-style: outset;
+}
+.hidden{
+    display: none;
 }
