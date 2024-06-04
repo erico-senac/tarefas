@@ -4,9 +4,10 @@
     --hue: 175;
     --cor-base: hsl(var(--hue), 65%, 40%);
     --cor-borda: hsl(var(--hue), 65%, 90%);
-    --fonte-cursiva: "Dancing Script", cursive;
+    --cor-marca: hsl(var(--hue), 65%, 75%);
+    --fonte-cursiva: "Dancing Script";
     /*weight de  400 a 700*/
-    --fonte-principal: "Exo 2", sans-serif;
+    --fonte-principal: "Exo 2";
     /*weight de 100 a 900*/
     font-size: 14px;
 }
@@ -17,18 +18,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--fonte-principal);
+    font-family: var(--fonte-principal), sans-serif;
     font-style: normal;
 }
 body{
     height: 100vh;
     width: 100vw;
     display: flex;
+    flex-direction: column;
     padding-top: 10rem;
     /*align-items: center;*/
     background: linear-gradient( to left, var(--cor-base), var(--cor-borda));
 }
-.app{
+.app, .app__list_tasks{
     margin: 0 auto;
     max-width: 50%;
     max-height: 400px;
@@ -53,11 +55,44 @@ figure.app__logo-imagem{
 .app__form{
     margin: auto;
 }
-.app__form_add_tasks{
+.app__form_add_tasks, .app__list_tasks{
     background-color: hsla(var(--hue), 65%, 95%, 0.65);
     border-radius: 10px;
     padding: 0.10rem 0.25rem;
     border-style: outset;
+}
+.app__list_tasks{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+.app__list_tasks_task{
+    margin: 0.25rem;
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    border-style: outset;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.task_name{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.task_name>span{
+    background-color: var(--cor-base);
+    width: 65%;
+    font-weight: bold;
+    text-align: center;
+}
+.task_details{
+    display: flex;
+    flex-direction: column;
 }
 .app__form_grid{
     height: 100%;
@@ -69,7 +104,7 @@ figure.app__logo-imagem{
 .app__form_titulo{
     text-align: center;
     font-size: 2.5rem;
-    font-family: var(--fonte-cursiva);
+    font-family: var(--fonte-cursiva), cursive;
 }
 .app__form_label{
     padding-top: 0.15rem;
