@@ -125,13 +125,11 @@ figure.app__logo-imagem{
     resize: none;
     height: 3rem;
 }
-
 .app__form_buttons{
     margin-top: 1rem;
     display: flex;
     justify-content: center;
 }
-
 .form__buttons{
     width: 100%;
     display: flex;
@@ -143,4 +141,10 @@ figure.app__logo-imagem{
 }
 .hidden{
     display: none;
+}
+hr{
+    width: 550px;
+    height: 0.5rem;
+    margin: 0 auto;
+    background: linear-gradient(to right, var(--cor-base), var(--cor-marca));
 }

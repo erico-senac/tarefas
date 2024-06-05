@@ -13,31 +13,71 @@ const date_task = document.querySelector('#date_task');
 const status_task = document.querySelector('#status_task');
 /*Painel Lista Tarefas*/
 let tarefas_ls = JSON.parse(localStorage.getItem('tarefas')) || [];
-const div_lista_tasks = document.querySelector('.app__lista_tasks');
+const div_lista_tasks = document.querySelector('.app__list_tasks');
 /*Create Task*/
 const atualizarDados = (tarefa) => {
     localStorage.setItem('tarefas', JSON.stringify(tarefa));
 };
 /*Inseri dados na lista da página*/
+const apagarTarefa = (padrao) => {
+    let novo = tarefas_ls.filter(task => task.nome !== padrao);
+    tarefas_ls = novo
+    atualizarDados(tarefas_ls);
+    atualizarLista(tarefas_ls);
+};
+
+const criaElemento = (tarefa) => {
+    /*Cria a div da tarefa*/
+    let itemTarefa = document.createElement('div');
+    itemTarefa.classList.add("app__list_tasks_task");
+    /*Cria a dive de nome da tarefa e adiciona os elementos*/
+        let taskName = document.createElement('div');
+        taskName.classList.add('task_name');
+            let spanName = document.createElement('span');
+            spanName.classList.add('name');
+            spanName.innerHTML = tarefa.nome;
+        taskName.appendChild(spanName);
+            let TaskActions = document.createElement('div');
+            TaskActions.classList.add('task_actions');
+                let spanBtnSucess = document.createElement('span');
+                spanBtnSucess.classList.add('btn', 'btn-success' ,'btn-sm');
+                spanBtnSucess.innerHTML = "<i class='fa fa-edit'></i>";
+                TaskActions.appendChild(spanBtnSucess);
+                let spanBtnDanger = document.createElement('span');
+                spanBtnDanger.classList.add('btn', 'btn-danger','btn-sm');
+                spanBtnDanger.innerHTML = "<i class='fa fa-eraser'></i>";
+                spanBtnDanger.onclick = () => {
+                    apagarTarefa(tarefa.nome);
+                };
+                TaskActions.appendChild(spanBtnDanger);
+                let spanBtnWarning = document.createElement('span');
+                spanBtnWarning.classList.add('btn', 'btn-warning','btn-sm');
+                spanBtnWarning.innerHTML = "<i class='fa fa-check'></i>";
+            TaskActions.appendChild(spanBtnWarning);
+        taskName.appendChild(TaskActions);
+        let taskDetails = document.createElement('div');
+        taskDetails.classList.add("task_details");
+            let spanDesc = document.createElement('span');
+            spanDesc.classList.add('details');
+            spanDesc.innerHTML = tarefa.detalhes.descricao;
+            taskDetails.appendChild(spanDesc);
+            let spanPrazo = document.createElement('span');
+            spanPrazo.classList.add('date');
+            spanPrazo.innerHTML = tarefa.detalhes.prazo;
+            taskDetails.appendChild(spanPrazo);
+            let spanStatus = document.createElement('span');
+            spanStatus.classList.add('status');
+            spanStatus.innerHTML = tarefa.detalhes.status;
+            taskDetails.appendChild(spanStatus);
+    itemTarefa.appendChild(taskName);
+    itemTarefa.appendChild(taskDetails);
+    return itemTarefa;
+}
+
 const atualizarLista = (tarefas) => {
-    let itemTarefa;
     tarefas.forEach(tarefa => {
-        itemTarefa = `<div className="app__list_tasks_task">
-            <div className="task_name">
-                <span className="name">${tarefa.nome}</span>
-                <div className="task_actions">
-                    <span className="btn btn-sm btn-success"><i className="fas fa-edit"></i></span>
-                    <span className="btn btn-sm btn-danger"><i className="fas fa-eraser"></i></span>
-                    <span className="btn btn-sm btn-warning"><i className="fas fa-check"></i></span>
-                </div>
-            </div>
-            <div className="task_details">
-                <span className="details">${tarefa.detalhes.descricao}</span>
-                <span className="date">${tarefa.detalhes.prazo}</span>
-                <span className="status">${tarefa.detalhes.status}</span>
-            </div>
-        </div>`;
-        div_lista_tasks.innerHTML += itemTarefa;
+        const divElemento = criaElemento(tarefa);
+        div_lista_tasks.append(divElemento);
     })
 }
 /*exibir formulário*/
@@ -77,3 +117,7 @@ formulario.addEventListener('submit', (e) => {
     e.target.reset();
     btnToggle();
 });
+
+if(tarefas_ls != null){
+    atualizarLista(tarefas_ls);
+}
