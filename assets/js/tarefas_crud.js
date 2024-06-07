@@ -14,19 +14,40 @@ const status_task = document.querySelector('#status_task');
 /*Painel Lista Tarefas*/
 let tarefas_ls = JSON.parse(localStorage.getItem('tarefas')) || [];
 const div_lista_tasks = document.querySelector('.app__list_tasks');
+/*Variável que controla atualização*/
+let novaTarefa = null;
 /*Create Task*/
 const atualizarDados = (tarefa) => {
     localStorage.setItem('tarefas', JSON.stringify(tarefa));
 };
 /*Inseri dados na lista da página*/
 const apagarTarefa = (padrao) => {
-    let novo = tarefas_ls.filter(task => task.nome !== padrao);
-    tarefas_ls = novo
+    tarefas_ls  = tarefas_ls.filter(task => task.nome !== padrao);
     atualizarDados(tarefas_ls);
-    atualizarLista(tarefas_ls);
 };
-
-const criaElemento = (tarefa) => {
+const editarTarefa = (index) => {
+    btnToggle();
+    novaTarefa = index;
+    formulario.querySelector('#name_task').value = tarefas_ls[index].nome;
+    formulario.querySelector('#task').value = tarefas_ls[index].detalhes.descricao;
+    formulario.querySelector('#class_task').value = tarefas_ls[index].detalhes.class;
+    let opcaoClassificacao = formulario.querySelector('#class_task');
+    for(let i = 0; i < opcaoClassificacao.length; i++) {
+        if(opcaoClassificacao.options[i].value === tarefas_ls[index].detalhes.classificacao){
+            opcaoClassificacao.selectedIndex = i;
+            break;
+        }
+    }
+    formulario.querySelector('#date_task').value = tarefas_ls[index].detalhes.prazo;
+    let opcaoStatus = formulario.querySelector('#status_task');
+    for(let i = 0; i <opcaoStatus.length; i++ ){
+        if(opcaoStatus.options[i].value === tarefas_ls[index].detalhes.status){
+            opcaoStatus.selectedIndex = i;
+            break;
+        }
+    }
+}
+const criaElemento = (tarefa, index) => {
     /*Cria a div da tarefa*/
     let itemTarefa = document.createElement('div');
     itemTarefa.classList.add("app__list_tasks_task");
@@ -41,13 +62,23 @@ const criaElemento = (tarefa) => {
             TaskActions.classList.add('task_actions');
                 let spanBtnSucess = document.createElement('span');
                 spanBtnSucess.classList.add('btn', 'btn-success' ,'btn-sm');
-                spanBtnSucess.innerHTML = "<i class='fa fa-edit'></i>";
+                if(tarefa.detalhes.status !== 'F'){
+                    spanBtnSucess.innerHTML = "<i class='fa fa-edit'></i>";
+                    spanBtnSucess.onclick = () => {
+                        editarTarefa(index)
+                    };
+                } else {
+                    spanBtnSucess.innerHTML = "<i class='fa fa-lock'></i>";
+                }
                 TaskActions.appendChild(spanBtnSucess);
                 let spanBtnDanger = document.createElement('span');
                 spanBtnDanger.classList.add('btn', 'btn-danger','btn-sm');
                 spanBtnDanger.innerHTML = "<i class='fa fa-eraser'></i>";
                 spanBtnDanger.onclick = () => {
-                    apagarTarefa(tarefa.nome);
+                    if(confirm("Deseja excluir a tarefa? ")) {
+                        apagarTarefa(tarefa.nome);
+                        location.reload();
+                    }
                 };
                 TaskActions.appendChild(spanBtnDanger);
                 let spanBtnWarning = document.createElement('span');
@@ -73,13 +104,11 @@ const criaElemento = (tarefa) => {
     itemTarefa.appendChild(taskDetails);
     return itemTarefa;
 }
-
-const atualizarLista = (tarefas) => {
-    tarefas.forEach(tarefa => {
-        const divElemento = criaElemento(tarefa);
-        div_lista_tasks.append(divElemento);
-    })
-}
+/*Carrega as tarefas na página*/
+tarefas_ls.forEach((tarefa, index) => {
+    const divElemento = criaElemento(tarefa, index);
+    div_lista_tasks.append(divElemento);
+});
 /*exibir formulário*/
 const btnToggle = () => {
     formulario.classList.toggle('hidden');
@@ -88,17 +117,15 @@ const btnToggle = () => {
 };
 btnAddTask.addEventListener('click', (e) => {
     btnToggle();
-    /*formulario.classList.remove('hidden');
-    div_formulario.classList.remove('app__form_grid');
-    e.target.classList.add("hidden");*/
 });
 btnCancelTask.addEventListener('click', (e) => {
-    /*formulario.classList.add('hidden');
-    div_formulario.classList.add('app__form_grid');
-    btnAddTask.classList.remove("hidden");*/
     btnToggle();
 });
 btnSaveTask.addEventListener('click', (e) => {
+    btnToggle();
+});
+formulario.addEventListener('submit', (e) => {
+    e.preventDefault();
     let tarefa = {
         'nome': name_task.value,
         'detalhes': {
@@ -108,16 +135,16 @@ btnSaveTask.addEventListener('click', (e) => {
             'status': status_task.value
         }
     }
-    tarefas_ls.push(tarefa);
+    if(novaTarefa === null) {
+        tarefas_ls.push(tarefa);
+    }else{
+        tarefas_ls[novaTarefa].nome = tarefa.nome;
+        tarefas_ls[novaTarefa].detalhes.descricao = tarefa.detalhes.descricao;
+        tarefas_ls[novaTarefa].detalhes.classificacao = tarefa.detalhes.classificacao;
+        tarefas_ls[novaTarefa].detalhes.prazo = tarefa.detalhes.prazo;
+        tarefas_ls[novaTarefa].detalhes.status = tarefa.detalhes.status;
+    }
     atualizarDados(tarefas_ls);
-    atualizarLista(tarefas_ls);
-});
-formulario.addEventListener('submit', (e) => {
-    e.preventDefault();
     e.target.reset();
-    btnToggle();
+    location.reload();
 });
-
-if(tarefas_ls != null){
-    atualizarLista(tarefas_ls);
-}

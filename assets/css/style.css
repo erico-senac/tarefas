@@ -62,10 +62,10 @@ figure.app__logo-imagem{
     border-style: outset;
 }
 .app__list_tasks{
+    margin-top: 1.5rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     flex-direction: row;
-    width: 100%;
     justify-content: space-between;
 }
 .app__list_tasks_task{
