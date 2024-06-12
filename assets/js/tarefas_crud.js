@@ -14,6 +14,9 @@ const status_task = document.querySelector('#status_task');
 /*Painel Lista Tarefas*/
 let tarefas_ls = JSON.parse(localStorage.getItem('tarefas')) || [];
 const div_lista_tasks = document.querySelector('.app__list_tasks');
+/*Pega valores dos select*/
+const opcaoClassificacao = formulario.querySelector('#class_task');
+const opcaoStatus = formulario.querySelector('#status_task');
 /*Variável que controla atualização*/
 let novaTarefa = null;
 /*Create Task*/
@@ -25,13 +28,17 @@ const apagarTarefa = (padrao) => {
     tarefas_ls  = tarefas_ls.filter(task => task.nome !== padrao);
     atualizarDados(tarefas_ls);
 };
+
+const finalizarTarefa = (index) => {
+    tarefas_ls[index].detalhes.status = 'F';
+    atualizarDados(tarefas_ls);
+}
 const editarTarefa = (index) => {
     btnToggle();
     novaTarefa = index;
     formulario.querySelector('#name_task').value = tarefas_ls[index].nome;
     formulario.querySelector('#task').value = tarefas_ls[index].detalhes.descricao;
     formulario.querySelector('#class_task').value = tarefas_ls[index].detalhes.class;
-    let opcaoClassificacao = formulario.querySelector('#class_task');
     for(let i = 0; i < opcaoClassificacao.length; i++) {
         if(opcaoClassificacao.options[i].value === tarefas_ls[index].detalhes.classificacao){
             opcaoClassificacao.selectedIndex = i;
@@ -39,7 +46,6 @@ const editarTarefa = (index) => {
         }
     }
     formulario.querySelector('#date_task').value = tarefas_ls[index].detalhes.prazo;
-    let opcaoStatus = formulario.querySelector('#status_task');
     for(let i = 0; i <opcaoStatus.length; i++ ){
         if(opcaoStatus.options[i].value === tarefas_ls[index].detalhes.status){
             opcaoStatus.selectedIndex = i;
@@ -53,7 +59,7 @@ const criaElemento = (tarefa, index) => {
     itemTarefa.classList.add("app__list_tasks_task");
     /*Cria a dive de nome da tarefa e adiciona os elementos*/
         let taskName = document.createElement('div');
-        taskName.classList.add('task_name');
+        taskName.classList.add('task_name', tarefa.detalhes.classificacao.toLowerCase());
             let spanName = document.createElement('span');
             spanName.classList.add('name');
             spanName.innerHTML = tarefa.nome;
@@ -65,7 +71,7 @@ const criaElemento = (tarefa, index) => {
                 if(tarefa.detalhes.status !== 'F'){
                     spanBtnSucess.innerHTML = "<i class='fa fa-edit'></i>";
                     spanBtnSucess.onclick = () => {
-                        editarTarefa(index)
+                        editarTarefa(index);
                     };
                 } else {
                     spanBtnSucess.innerHTML = "<i class='fa fa-lock'></i>";
@@ -83,7 +89,15 @@ const criaElemento = (tarefa, index) => {
                 TaskActions.appendChild(spanBtnDanger);
                 let spanBtnWarning = document.createElement('span');
                 spanBtnWarning.classList.add('btn', 'btn-warning','btn-sm');
-                spanBtnWarning.innerHTML = "<i class='fa fa-check'></i>";
+                if(tarefa.detalhes.status !== 'F'){
+                    spanBtnWarning.innerHTML = "<i class='fa fa-check'></i>";
+                    spanBtnWarning.onclick = () => {
+                        finalizarTarefa(index);
+                        location.reload();
+                    }
+                }else{
+                    spanBtnWarning.innerHTML = "<i class='fa fa-lock'></i>";
+                }
             TaskActions.appendChild(spanBtnWarning);
         taskName.appendChild(TaskActions);
         let taskDetails = document.createElement('div');
@@ -94,11 +108,21 @@ const criaElemento = (tarefa, index) => {
             taskDetails.appendChild(spanDesc);
             let spanPrazo = document.createElement('span');
             spanPrazo.classList.add('date');
-            spanPrazo.innerHTML = tarefa.detalhes.prazo;
+            let prazoData = new Date(tarefa.detalhes.prazo)
+            spanPrazo.innerHTML = `<strong>Prazo: ${prazoData.toLocaleTimeString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: "numeric" ,
+                hour: '2-digit',
+                minute: '2-digit',
+            })} </strong>`;
             taskDetails.appendChild(spanPrazo);
             let spanStatus = document.createElement('span');
             spanStatus.classList.add('status');
-            spanStatus.innerHTML = tarefa.detalhes.status;
+            for(let i = 0; i < opcaoStatus.length; i++ ){
+                if(opcaoStatus.options[i].value === tarefa.detalhes.status)
+                    spanStatus.innerHTML = `Status: ${opcaoStatus.options[i].innerHTML}`;
+            }
             taskDetails.appendChild(spanStatus);
     itemTarefa.appendChild(taskName);
     itemTarefa.appendChild(taskDetails);
@@ -115,13 +139,13 @@ const btnToggle = () => {
     div_formulario.classList.toggle('app__form_grid');
     btnAddTask.classList.toggle("hidden");
 };
-btnAddTask.addEventListener('click', (e) => {
+btnAddTask.addEventListener('click', () => {
     btnToggle();
 });
-btnCancelTask.addEventListener('click', (e) => {
+btnCancelTask.addEventListener('click', () => {
     btnToggle();
 });
-btnSaveTask.addEventListener('click', (e) => {
+btnSaveTask.addEventListener('click', () => {
     btnToggle();
 });
 formulario.addEventListener('submit', (e) => {
