@@ -19,6 +19,13 @@ const opcaoClassificacao = formulario.querySelector('#class_task');
 const opcaoStatus = formulario.querySelector('#status_task');
 /*Variável que controla atualização*/
 let novaTarefa = null;
+/*Change color Task*/
+const styleCores = document.styleSheets;
+const task_color = document.querySelector('#task_color');
+let cor_escolhida = ""
+task_color.addEventListener('change', (e) => {
+    cor_escolhida = e.target.value;
+})
 /*Create Task*/
 const atualizarDados = (tarefa) => {
     localStorage.setItem('tarefas', JSON.stringify(tarefa));
@@ -56,10 +63,17 @@ const editarTarefa = (index) => {
 const criaElemento = (tarefa, index) => {
     /*Cria a div da tarefa*/
     let itemTarefa = document.createElement('div');
-    itemTarefa.classList.add("app__list_tasks_task");
+    itemTarefa.classList.add("app__list_tasks_task", `${tarefa.detalhes.classificacao.toLowerCase()}`);
+    if(tarefa.detalhes.cor !== "") {
+        itemTarefa.classList.add("app__list_tasks_task", `${tarefa.detalhes.classificacao.toLowerCase()}_${index}`);
+        styleCores[0].insertRule(`${tarefa.detalhes.classificacao.toLowerCase()}_${index}{
+             background: linear-gradient(to bottom, var(--cor-base) 10%, ${tarefa.detalhes.cor} 70%);
+            }`, 0);
+        // document.body.style.setProperty(`--cor-${tarefa.detalhes.classificacao.toLowerCase()}`, tarefa.detalhes.cor);
+    }
     /*Cria a dive de nome da tarefa e adiciona os elementos*/
         let taskName = document.createElement('div');
-        taskName.classList.add('task_name', tarefa.detalhes.classificacao.toLowerCase());
+        taskName.classList.add('task_name');
             let spanName = document.createElement('span');
             spanName.classList.add('name');
             spanName.innerHTML = tarefa.nome;
@@ -156,7 +170,8 @@ formulario.addEventListener('submit', (e) => {
             'descricao': task.value,
             'classificacao': class_task.value,
             'prazo': date_task.value,
-            'status': status_task.value
+            'status': status_task.value,
+            'cor' : cor_escolhida
         }
     }
     if(novaTarefa === null) {
@@ -167,6 +182,7 @@ formulario.addEventListener('submit', (e) => {
         tarefas_ls[novaTarefa].detalhes.classificacao = tarefa.detalhes.classificacao;
         tarefas_ls[novaTarefa].detalhes.prazo = tarefa.detalhes.prazo;
         tarefas_ls[novaTarefa].detalhes.status = tarefa.detalhes.status;
+        tarefas_ls[novaTarefa].detalhes.cor = tarefa.detalhes.cor;
     }
     atualizarDados(tarefas_ls);
     e.target.reset();
