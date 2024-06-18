@@ -21,11 +21,21 @@
         </main>
         <div class="app__form app__form_grid" >
             <div class="app__form_titulo">Agendador de Tarefas</div>
+            <div class="app__form_confirma hidden ">
+                <img src="./assets/images/balao_dialogo.png" alt="" class="app__confirmacao">
+                <div id="mensagem">
+                    <p>Deseja Realmente apagar a Tarefa <span id="mensagem_tarefa"></span>? </p>
+                    <div>
+                        <input id="btn_confirme" class="btn btn-success" type="submit" value="Confirmar">
+                        <input id="btn_cancelar" class="btn btn-danger" type="button" value="Cancelar">
+                    </div>
+                </div>
+            </div>
             <form class="app__form_add_tasks hidden">
                 <label class="app__form_label form-label">
                     Nome da Tarefa
                     <input id="name_task" name="name_task" type="text" class="form-text app__form_text" placeholder="Digite um nome para tarefa"
-                           required>
+                           maxlength="14" required>
                 </label>
                 <label class="app__form_label form-label">
                     Descrição
@@ -43,6 +53,10 @@
                     </select>
                 </label>
                 <label class="app__form_label form-label">
+                    Selecione uma cor para a Tarefa
+                </label>
+                    <input type="color" name="cores" id="task_color">
+                <label class="app__form_label form-label">
                     Prazo
                     <input id="date_task" type="datetime-local" class="form-text app__form_text" required>
                 </label>
@@ -57,10 +71,6 @@
                             <option value="NC">Não Concluída</option>
                         </optgroup>
                     </select>
-                </label>
-                <label for="task_color" class="app__form_label form-label">
-                    Selecione uma cor para a Tarefa
-                    <input type="color" name="cores" id="task_color">
                 </label>
                 <div class="app__form_buttons">
                     <div class="form__buttons">

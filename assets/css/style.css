@@ -14,7 +14,6 @@
     /*weight de 100 a 900*/
     font-size: 14px;
 }
-
 *,
 *:before,
 *:after{
@@ -23,6 +22,10 @@
     box-sizing: border-box;
     font-family: var(--fonte-principal), sans-serif;
     font-style: normal;
+}
+input:invalid,
+textarea:invalid{
+    border-color: hsl(0, 100%, 70%);
 }
 body{
     height: 100vh;
@@ -58,6 +61,27 @@ figure{
 figure.app__logo-imagem{
     width: 80%;
 }
+.app__form_confirma{
+    display: flex;
+    margin-top: 5rem;
+}
+.app__form_confirma > img{
+    position: absolute;
+    width: 31rem;
+    height: 10rem;
+}
+div#mensagem{
+    padding: 2rem;
+    position: absolute;
+    width: 20rem;
+    margin: auto;
+    height: 10rem;
+    display: grid;
+    z-index: 100;
+}
+#mensagem_tarefa{
+    font-weight: 700;
+}
 .app__form{
     margin: auto;
 }
@@ -68,15 +92,15 @@ figure.app__logo-imagem{
     border-style: outset;
 }
 .app__form_add_tasks{
-    position: fixed;
-    top: 11rem;
+    position: sticky;
+    margin-top: -4rem;
     width: 300px;
     margin-bottom:0;
 }
 .app__list_tasks{
     margin-top: 1.5rem;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     flex-direction: row;
     justify-content: space-between;
 }
@@ -92,6 +116,7 @@ figure.app__logo-imagem{
     padding: 0.5rem;
     border-style: outset;
     width: 100%;
+    height: 10rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -104,7 +129,7 @@ figure.app__logo-imagem{
 }
 .task_name>span{
     /*background-color: var(--cor-base);*/
-    width: 65%;
+    width: 50%;
     font-weight: bold;
     text-align: center;
 }

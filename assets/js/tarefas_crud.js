@@ -17,13 +17,23 @@ const div_lista_tasks = document.querySelector('.app__list_tasks');
 /*Pega valores dos select*/
 const opcaoClassificacao = formulario.querySelector('#class_task');
 const opcaoStatus = formulario.querySelector('#status_task');
+/* div de confirmar a exclusão de tarefas*/
+const formConfirmacao = document.querySelector('.app__form_confirma');
+const btn_confirme = document.querySelector('#btn_confirme');
+const btn_cancelar = document.querySelector('#btn_cancelar');
 /*Variável que controla atualização*/
 let novaTarefa = null;
 /*Change color Task*/
-const styleCores = document.styleSheets;
-const task_color = document.querySelector('#task_color');
+const mudarCorDoCard = (regra, cor) => {
+    const styleCores = document.createElement('style');
+    document.head.appendChild(styleCores);
+    styleCores.sheet.insertRule(`.${regra}{
+             background: linear-gradient(to bottom, var(--cor-base) 10%, ${cor} 70%);
+            }`, 0);
+};
+const color_task = formulario.querySelector('#task_color');
 let cor_escolhida = ""
-task_color.addEventListener('change', (e) => {
+color_task.addEventListener('change', (e) => {
     cor_escolhida = e.target.value;
 })
 /*Create Task*/
@@ -34,6 +44,7 @@ const atualizarDados = (tarefa) => {
 const apagarTarefa = (padrao) => {
     tarefas_ls  = tarefas_ls.filter(task => task.nome !== padrao);
     atualizarDados(tarefas_ls);
+    location.reload();
 };
 
 const finalizarTarefa = (index) => {
@@ -59,6 +70,7 @@ const editarTarefa = (index) => {
             break;
         }
     }
+    formulario.querySelector('#task_color').value = tarefas_ls[index].detalhes.cor;
 }
 const criaElemento = (tarefa, index) => {
     /*Cria a div da tarefa*/
@@ -66,10 +78,7 @@ const criaElemento = (tarefa, index) => {
     itemTarefa.classList.add("app__list_tasks_task", `${tarefa.detalhes.classificacao.toLowerCase()}`);
     if(tarefa.detalhes.cor !== "") {
         itemTarefa.classList.add("app__list_tasks_task", `${tarefa.detalhes.classificacao.toLowerCase()}_${index}`);
-        styleCores[0].insertRule(`${tarefa.detalhes.classificacao.toLowerCase()}_${index}{
-             background: linear-gradient(to bottom, var(--cor-base) 10%, ${tarefa.detalhes.cor} 70%);
-            }`, 0);
-        // document.body.style.setProperty(`--cor-${tarefa.detalhes.classificacao.toLowerCase()}`, tarefa.detalhes.cor);
+        mudarCorDoCard(`${tarefa.detalhes.classificacao.toLowerCase()}_${index}`,tarefa.detalhes.cor)
     }
     /*Cria a dive de nome da tarefa e adiciona os elementos*/
         let taskName = document.createElement('div');
@@ -95,10 +104,14 @@ const criaElemento = (tarefa, index) => {
                 spanBtnDanger.classList.add('btn', 'btn-danger','btn-sm');
                 spanBtnDanger.innerHTML = "<i class='fa fa-eraser'></i>";
                 spanBtnDanger.onclick = () => {
-                    if(confirm("Deseja excluir a tarefa? ")) {
+                    formConfirmacao.classList.remove('hidden');
+                    formConfirmacao.querySelector('#mensagem_tarefa').innerHTML = tarefa.nome;
+                    btn_confirme.onclick = () => {
                         apagarTarefa(tarefa.nome);
-                        location.reload();
-                    }
+                    };
+                    btn_cancelar.onclick = () => {
+                        formConfirmacao.classList.add('hidden');
+                    };
                 };
                 TaskActions.appendChild(spanBtnDanger);
                 let spanBtnWarning = document.createElement('span');
@@ -145,7 +158,7 @@ const criaElemento = (tarefa, index) => {
 /*Carrega as tarefas na página*/
 tarefas_ls.forEach((tarefa, index) => {
     const divElemento = criaElemento(tarefa, index);
-    div_lista_tasks.append(divElemento);
+    div_lista_tasks.prepend(divElemento);
 });
 /*exibir formulário*/
 const btnToggle = () => {
@@ -157,10 +170,11 @@ btnAddTask.addEventListener('click', () => {
     btnToggle();
 });
 btnCancelTask.addEventListener('click', () => {
+    novaTarefa = null;
     btnToggle();
 });
 btnSaveTask.addEventListener('click', () => {
-    btnToggle();
+    // btnToggle();
 });
 formulario.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -171,7 +185,7 @@ formulario.addEventListener('submit', (e) => {
             'classificacao': class_task.value,
             'prazo': date_task.value,
             'status': status_task.value,
-            'cor' : cor_escolhida
+            'cor' : novaTarefa === null ? cor_escolhida : color_task.value,
         }
     }
     if(novaTarefa === null) {
