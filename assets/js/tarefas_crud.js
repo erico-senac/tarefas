@@ -73,6 +73,15 @@ const editarTarefa = (index) => {
     formulario.querySelector('#task_color').value = tarefas_ls[index].detalhes.cor;
 }
 const criaElemento = (tarefa, index) => {
+    let elementoI
+    switch(tarefa.detalhes.classificacao.toLowerCase()) {
+        case 'profissional' :   elementoI = 'bi-person-badge';
+                                break;
+        case 'familiar'     :   elementoI = 'bi-house-heart-fill';
+                                break;
+        case 'lazer'        :   elementoI = 'bi-bicycle';
+                                break;
+    }
     /*Cria a div da tarefa*/
     let itemTarefa = document.createElement('div');
     itemTarefa.classList.add("app__list_tasks_task", `${tarefa.detalhes.classificacao.toLowerCase()}`);
@@ -82,11 +91,14 @@ const criaElemento = (tarefa, index) => {
     }
     /*Cria a dive de nome da tarefa e adiciona os elementos*/
         let taskName = document.createElement('div');
-        taskName.classList.add('task_name');
+            taskName.classList.add('task_name');
+            let icon = document.createElement('i')
+            icon.classList.add('bi',elementoI);
+            taskName.appendChild(icon);
             let spanName = document.createElement('span');
             spanName.classList.add('name');
             spanName.innerHTML = tarefa.nome;
-        taskName.appendChild(spanName);
+            taskName.appendChild(spanName);
             let TaskActions = document.createElement('div');
             TaskActions.classList.add('task_actions');
                 let spanBtnSucess = document.createElement('span');
@@ -126,7 +138,7 @@ const criaElemento = (tarefa, index) => {
                     spanBtnWarning.innerHTML = "<i class='fa fa-lock'></i>";
                 }
             TaskActions.appendChild(spanBtnWarning);
-        taskName.appendChild(TaskActions);
+            taskName.appendChild(TaskActions);
         let taskDetails = document.createElement('div');
         taskDetails.classList.add("task_details");
             let spanDesc = document.createElement('span');
